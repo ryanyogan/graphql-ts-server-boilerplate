@@ -1,8 +1,8 @@
 // tslint:disable-next-line:no-implicit-dependencies
 import { request } from "graphql-request";
 import { AddressInfo } from "net";
-import { User } from "../entity/User";
-import { startServer } from "../server";
+import { User } from "../../../entity/User";
+import { startServer } from "../../../server";
 
 let getHost = () => "";
 
