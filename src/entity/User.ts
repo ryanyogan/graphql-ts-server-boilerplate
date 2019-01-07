@@ -9,7 +9,7 @@ import {
 // tslint:disable-next-line:no-submodule-imports
 import * as uuidv4 from "uuid/v4";
 
-@Entity()
+@Entity("users")
 export class User extends BaseEntity {
   @PrimaryColumn("uuid")
   id: string;
