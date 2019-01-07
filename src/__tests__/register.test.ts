@@ -1,11 +1,15 @@
 // tslint:disable-next-line:no-implicit-dependencies
 import { request } from "graphql-request";
-import { host } from "../constants";
+import { AddressInfo } from "net";
 import { User } from "../entity/User";
-import { createTypeormConnection } from "../utils/createTypeormConnection";
+import { startServer } from "../server";
+
+let getHost = () => "";
 
 beforeAll(async () => {
-  await createTypeormConnection();
+  const app = await startServer();
+  const { port } = app.address() as AddressInfo;
+  getHost = () => `http://127.0.0.1:${port}`;
 });
 
 const email = "asdasd@asd22asd";
@@ -18,7 +22,7 @@ const mutation = `
 `;
 
 test("Register User", async () => {
-  const response = await request(host, mutation);
+  const response = await request(getHost(), mutation);
   expect(response).toEqual({ register: true });
   const users = await User.find({ where: { email } });
   expect(users).toHaveLength(1);
