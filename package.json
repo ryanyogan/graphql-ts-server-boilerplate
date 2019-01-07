@@ -25,13 +25,12 @@
     "graphql-yoga": "^1.16.9",
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
-    "typeorm": "0.2.11",
-    "uuid": "^3.3.2"
+    "typeorm": "0.2.11"
   },
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts",
-    "test": "NODE_ENV=test jest --detectOpenHandles --watch"
+    "test": "NODE_ENV=test jest --detectOpenHandles --watch --forceExit"
   },
   "jest": {
     "transform": {
