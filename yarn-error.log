@@ -44,9 +44,10 @@ npm manifest:
       "uuid": "^3.3.2"
     },
     "scripts": {
-      "start": "nodemon --exec ts-node src/index.ts",
+      "test-server": "NODE_ENV=test ts-node src/index.ts",
+      "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts",
-      "test": "jest"
+      "test": "NODE_ENV=test jest"
     },
     "jest": {
       "transform": {
@@ -4745,7 +4746,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c jest
+  Arguments: -c NODE_ENV=test jest
   Directory: /Users/ryanyogan/personal/graphql-ts-server-boilerplate
   Output:
   
