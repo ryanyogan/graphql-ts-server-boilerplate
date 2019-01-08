@@ -1,8 +1,8 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
 import { ResolverMap } from "../../types/graphql-utils";
-import { GQL } from "../..//types/schema";
 import { User } from "../../entity/User";
+import { GQL } from "../../types/schema";
 import { formatYupError } from "../../utils/formatYupError";
 import {
   duplicateEmail,

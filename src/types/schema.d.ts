@@ -22,6 +22,7 @@ export namespace GQL {
 
   interface IQuery {
     __typename: "Query";
+    foo: string;
     hello: string;
   }
 
@@ -31,12 +32,18 @@ export namespace GQL {
 
   interface IMutation {
     __typename: "Mutation";
-    register: boolean;
+    register: Array<IError> | null;
   }
 
   interface IRegisterOnMutationArguments {
     email: string;
     password: string;
+  }
+
+  interface IError {
+    __typename: "Error";
+    path: string;
+    message: string;
   }
 }
 

@@ -7,6 +7,7 @@
     "@types/ioredis": "^4.0.4",
     "@types/jest": "^23.3.12",
     "@types/node": "^10.12.18",
+    "@types/node-fetch": "^2.1.4",
     "@types/uuid": "^3.4.4",
     "@types/yup": "^0.26.4",
     "graphql-request": "^1.8.2",
@@ -19,13 +20,16 @@
     "typescript": "3.2.2"
   },
   "dependencies": {
+    "@gql2ts/from-schema": "^1.10.1",
     "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
     "gql2ts": "^1.10.1",
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.3",
     "graphql-yoga": "^1.16.9",
     "ioredis": "^4.3.0",
+    "node-fetch": "^2.3.0",
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.11",
@@ -34,8 +38,8 @@
   },
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
-    "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts",
-    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit"
+    "gen-schema-types": "ts-node src/scripts/createTypes.ts",
+    "test": "NODE_ENV=test jest --detectOpenHandles --watch"
   },
   "jest": {
     "globalSetup": "./src/test_setup/ts.config.js",
