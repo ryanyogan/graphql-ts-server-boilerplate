@@ -8,4 +8,7 @@ export class User extends BaseEntity {
   @Column("varchar", { length: 255 }) email: string;
 
   @Column("text") password: string;
+
+  @Column("boolean", { default: false })
+  confirmed: boolean;
 }
