@@ -10,8 +10,8 @@ import {
   emailNotLongEnough,
   invalidEmail
 } from "./errorMessages";
-import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
-import { sendEmail } from "../../utils/sendEmail";
+// import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
+// import { sendEmail } from "../../utils/sendEmail";
 
 const schema = yup.object().shape({
   email: yup
@@ -32,45 +32,46 @@ export const resolvers: ResolverMap = {
   Mutation: {
     register: async (
       _,
-      { email, password }: GQL.IRegisterOnMutationArguments,
-      { redis, url }
-    ) => {
-      try {
-        await schema.validate({ email, password }, { abortEarly: false });
-      } catch (err) {
-        return formatYupError(err);
-      }
+      { email, password }: GQL.IRegisterOnMutationArguments
+    ) =>
+      // { redis, url }
+      {
+        try {
+          await schema.validate({ email, password }, { abortEarly: false });
+        } catch (err) {
+          return formatYupError(err);
+        }
 
-      const userAlreadyExists = await User.findOne({
-        where: { email },
-        select: ["id"]
-      });
+        const userAlreadyExists = await User.findOne({
+          where: { email },
+          select: ["id"]
+        });
 
-      if (userAlreadyExists) {
-        return [
-          {
-            path: "email",
-            message: duplicateEmail
-          }
-        ];
-      }
+        if (userAlreadyExists) {
+          return [
+            {
+              path: "email",
+              message: duplicateEmail
+            }
+          ];
+        }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = User.create({
-        id: v4(),
-        email,
-        password: hashedPassword
-      });
-      await user.save();
-
-      if (process.env.NODE_ENV !== "test") {
-        await sendEmail(
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = User.create({
+          id: v4(),
           email,
-          await createConfirmEmailLink(url, user.id, redis)
-        );
-      }
+          password: hashedPassword
+        });
+        await user.save();
 
-      return null;
-    }
+        // if (process.env.NODE_ENV !== "test") {
+        //   await sendEmail(
+        //     email,
+        //     await createConfirmEmailLink(url, user.id, redis)
+        //   );
+        // }
+
+        return null;
+      }
   }
 };
