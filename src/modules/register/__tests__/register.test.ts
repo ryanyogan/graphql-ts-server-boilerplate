@@ -8,6 +8,7 @@ import {
   passwordNotLongEnough
 } from "../errorMessages";
 import { createTypeormConnection } from "../../../utils/createTypeormConnection";
+import { Connection } from "typeorm";
 
 const email = "foo@example.com";
 const password = "asdasd";
@@ -21,8 +22,14 @@ const mutation = (e: string, p: string) => `
   }
 `;
 
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeormConnection();
+  conn = await createTypeormConnection();
+});
+
+afterAll(async () => {
+  conn.close();
 });
 
 describe("Register User", async () => {
@@ -31,6 +38,7 @@ describe("Register User", async () => {
       process.env.TEST_HOST as string,
       mutation(email, password)
     );
+
     expect(response).toEqual({ register: null });
     const users = await User.find({ where: { email } });
     expect(users).toHaveLength(1);

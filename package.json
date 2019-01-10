@@ -1,9 +1,12 @@
 {
   "name": "graphql-ts-server-boilerplate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Awesome project developed with TypeORM.",
+  "license": "N/A",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/connect-redis": "^0.0.8",
+    "@types/express-session": "^1.15.11",
     "@types/ioredis": "^4.0.4",
     "@types/jest": "^23.3.12",
     "@types/node": "^10.12.18",
@@ -21,9 +24,12 @@
   },
   "dependencies": {
     "@gql2ts/from-schema": "^1.10.1",
+    "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
+    "connect-redis": "^3.4.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "gql2ts": "^1.10.1",
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1",
@@ -42,10 +48,11 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
     "gen-schema-types": "ts-node src/scripts/createTypes.ts",
-    "test": "NODE_ENV=test jest --detectOpenHandles --watch"
+    "test": "NODE_ENV=test jest --watch"
   },
   "jest": {
     "globalSetup": "./src/test_setup/ts.config.js",
+    "testUrl": "http://localhost/",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
