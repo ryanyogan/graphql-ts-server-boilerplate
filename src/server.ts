@@ -1,3 +1,6 @@
+import "reflect-metadata";
+// tslint:disable-next-line:no-submodule-imports
+import "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
@@ -6,17 +9,21 @@ import { redis } from "./redis";
 import { createTypeormConnection } from "./utils/createTypeormConnection";
 import { confirmEmail } from "./routes/confirmEmail";
 import { genSchema } from "./utils/generateSchema";
+import { redisSessionPrefix } from "./constants";
 
-const SESSION_SECRET = "asasda45ns#12//dsadedads";
-
+const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session);
 
 export const startServer = async () => {
+  if (process.env.NODE_ENV === "test") {
+    await redis.flushall();
+  }
+
   const server = new GraphQLServer({
     schema: genSchema(),
     context: ({ request }) => ({
       redis,
-      url: `${request.protocol}://${request.get("host")}`,
+      url: request.protocol + "://" + request.get("host"),
       session: request.session
     })
   });
@@ -24,7 +31,8 @@ export const startServer = async () => {
   server.express.use(
     session({
       store: new RedisStore({
-        client: redis as any
+        client: redis as any,
+        prefix: redisSessionPrefix
       }),
       name: "qid",
       secret: SESSION_SECRET,
@@ -46,14 +54,14 @@ export const startServer = async () => {
         : (process.env.FRONTEND_HOST as string)
   };
 
-  server.express.get("/confirm/:id", (req, res) => confirmEmail(req, res));
+  server.express.get("/confirm/:id", confirmEmail);
 
   await createTypeormConnection();
   const app = await server.start({
     cors,
     port: process.env.NODE_ENV === "test" ? 0 : 4000
   });
-  console.log("Server is running on http://localhost:4000"); // eslint-disable-line
+  console.log("Server is running on localhost:4000");
 
   return app;
 };

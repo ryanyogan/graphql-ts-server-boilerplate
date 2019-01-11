@@ -23,12 +23,19 @@ export namespace GQL {
   interface IQuery {
     __typename: "Query";
     foo2: string;
+    me: IUser | null;
     foo: string;
     hello: string;
   }
 
   interface IHelloOnQueryArguments {
     name?: string | null;
+  }
+
+  interface IUser {
+    __typename: "User";
+    id: string;
+    email: string;
   }
 
   interface IMutation {

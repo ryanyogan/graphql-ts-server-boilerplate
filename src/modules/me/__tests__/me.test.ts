@@ -29,8 +29,8 @@ const meQuery = `
 beforeAll(async () => {
   conn = await createTypeormConnection();
   const user = await User.create({
-    email: "bob5@bob.com",
-    password: "jlkajoioiqwe",
+    email,
+    password,
     confirmed: true
   }).save();
   userId = user.id;
@@ -41,6 +41,13 @@ afterAll(async () => {
 });
 
 describe("me", () => {
+  it("returns null if there is no cookie", async () => {
+    const response = await axios.post(process.env.TEST_HOST as string, {
+      query: meQuery
+    });
+    expect(response.data.data.me).toBeNull();
+  });
+
   it("retreives current user ", async () => {
     await axios.post(
       process.env.TEST_HOST as string,

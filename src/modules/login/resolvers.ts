@@ -43,7 +43,7 @@ export const resolvers: ResolverMap = {
         return errorResponse;
       }
 
-      session!.userId = user.id; // Session may be undefined
+      session.userId = user.id; // Session may be undefined
 
       return null;
     }

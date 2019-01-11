@@ -4,10 +4,8 @@ export default async (
   resolver: Resolver,
   parent: any,
   args: any,
-  ctx: any,
+  context: any,
   info: any
 ) => {
-  const result = await resolver(parent, args, ctx, info);
-
-  return result;
+  return resolver(parent, args, context, info);
 };
