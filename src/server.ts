@@ -24,7 +24,8 @@ export const startServer = async () => {
     context: ({ request }) => ({
       redis,
       url: request.protocol + "://" + request.get("host"),
-      session: request.session
+      session: request.session,
+      req: request
     })
   });
 

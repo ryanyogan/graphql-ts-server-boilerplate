@@ -23,7 +23,21 @@ afterAll(async () => {
 });
 
 describe("logout", () => {
-  it("logout current user", async () => {
+  it("can log out multiple sessions", async () => {
+    const sess1 = new TestClient(process.env.TEST_HOST as string); // Client #1
+    const sess2 = new TestClient(process.env.TEST_HOST as string); // Client #2
+
+    await sess1.login(email, password);
+    await sess2.login(email, password);
+
+    await sess1.me();
+    expect(await sess1.me()).toEqual(await sess2.me());
+
+    await sess1.logout();
+    expect(await sess1.me()).toEqual(await sess2.me());
+  });
+
+  it("logout current user on single session", async () => {
     const client = new TestClient(process.env.TEST_HOST as string);
 
     await client.login(email, password);
