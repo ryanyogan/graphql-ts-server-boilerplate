@@ -4,6 +4,8 @@ import "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
+import * as RateLimit from "express-rate-limit";
+import * as RateLimitRedisStore from "rate-limit-redis";
 import { redis } from "./redis";
 
 import { createTypeormConnection } from "./utils/createTypeormConnection";
@@ -28,6 +30,16 @@ export const startServer = async () => {
       req: request
     })
   });
+
+  server.express.use(
+    new RateLimit({
+      store: new RateLimitRedisStore({
+        client: redis as any
+      }),
+      windowMs: 15 * 60 * 1000,
+      max: 100
+    })
+  );
 
   server.express.use(
     session({
